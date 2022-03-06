@@ -9,32 +9,38 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @SpringBootApplication
 public class HomebankingApplication implements ApplicationRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HomebankingApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HomebankingApplication.class, args);
+    }
 
-	@Autowired
-	private ClientRepository clientRepository;
-	@Autowired
-	private AccountRepository accountRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		// clientRepository.save(new Client("Nicolás", "Nahuelvil", "nicolasnahuelvil@gmail.com"));
-		Client client = new Client("Melba", "Morel", "melba@mindhub.com");
-		clientRepository.save(client);
+    @Override
+    @Transactional
+    public void run(ApplicationArguments args) throws Exception {
 
-		// clientRepository.save(new Client("Melba", "Morel", "melba@mindhub.com", (Set<Account>) new Account("VIN001", LocalDateTime.now(), 0)));
-		 accountRepository.save(new Account("VIN001", LocalDateTime.now().plusDays(1), 5000, client));
-		 accountRepository.save(new Account("VIN002", LocalDateTime.now().plusDays(1), 7500, client));
-	}
+        //Creación de Clients
+        Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
+        Client client2 = new Client("Nicolás", "Nahuelvil", "nicolasnahuelvil@gmail.com");
+        clientRepository.save(client1);
+        clientRepository.save(client2);
+
+        //Creación de cuentas bancarias
+        accountRepository.save(new Account("VIN001", LocalDate.now(), 5000, client1));
+        accountRepository.save(new Account("VIN002", LocalDate.now().plusDays(1), 7500, client1));
+        accountRepository.save(new Account("VIN003", LocalDate.now(), 1450000, client2));
+
+    }
 
 
 }

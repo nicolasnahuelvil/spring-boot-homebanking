@@ -1,11 +1,13 @@
 package com.mindhub.homebanking.models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.time.LocalDate;
+
 
 @Entity
 public class Account  {
@@ -18,7 +20,7 @@ public class Account  {
     @NotNull
     private String number;
     @NotNull
-    private LocalDateTime dateNow;
+    private LocalDate dateNow;
     @NotNull
     private double balance;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -29,19 +31,30 @@ public class Account  {
     public Account() {
     }
 
-    public Account(String number, LocalDateTime dateNow, double balance) {
+    public Account(String number, LocalDate dateNow, double balance) {
         this.number = number;
         this.dateNow = dateNow;
         this.balance = balance;
     }
 
-    public Account(String number, LocalDateTime dateNow, double balance, Client client) {
+    public Account(String number, LocalDate dateNow, double balance, Client client) {
         this.number = number;
         this.dateNow = dateNow;
         this.balance = balance;
         this.client = client;
     }
 
+    public Account(long id, String number, LocalDate dateNow, double balance, Client client) {
+        this.id = id;
+        this.number = number;
+        this.dateNow = dateNow;
+        this.balance = balance;
+        this.client = client;
+    }
+
+    public long getId() {
+        return id;
+    }
     public String getNumber() {
         return number;
     }
@@ -50,11 +63,11 @@ public class Account  {
         this.number = number;
     }
 
-    public LocalDateTime getDateNow() {
+    public LocalDate getDateNow() {
         return dateNow;
     }
 
-    public void setDateNow(LocalDateTime dateNow) {
+    public void setDateNow(LocalDate dateNow) {
         this.dateNow = dateNow;
     }
 
@@ -66,6 +79,7 @@ public class Account  {
         this.balance = balance;
     }
 
+    @JsonIgnore
     public Client getClient() {
         return client;
     }

@@ -1,11 +1,13 @@
 package com.mindhub.homebanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -14,7 +16,8 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    @JsonIgnore
+    private Long id;
     @NotNull
     private String firstName;
     @NotNull
@@ -28,21 +31,34 @@ public class Client {
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email, Set<Account> accounts) {
+    public Client(Long id, String firstName, String lastName, String email, Set<Account> account) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.accounts = accounts;
     }
 
-    //Constructor con todos los parametros
     public Client(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
+    //Constructor con todos los parametros
+    public Client(Long id, String firstName, String lastName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+
     //Getters y setters
+
+
+    public Long getId() {return id;}
+
     public String getFirstName() {
         return firstName;
     }
