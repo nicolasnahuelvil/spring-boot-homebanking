@@ -7,6 +7,8 @@ import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -26,6 +28,8 @@ public class Account  {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="client_id")
     private Client client;
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<Transaction> transactions = new HashSet<>();
 
 
     public Account() {
@@ -86,6 +90,14 @@ public class Account  {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
