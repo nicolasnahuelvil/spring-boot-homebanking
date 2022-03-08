@@ -9,12 +9,11 @@ import java.util.stream.Collectors;
 
 public class AccountDTO {
 
-    private  long id;
+    private long id;
     private String number;
     private LocalDate dateNow;
     private double balance;
     private Set<TransactionDTO> transactions = new HashSet<>();
-
 
 
     public AccountDTO(Account account) {
@@ -22,7 +21,11 @@ public class AccountDTO {
         this.number = account.getNumber();
         this.dateNow = account.getDateNow();
         this.balance = account.getBalance();
-        this.transactions = account.getTransactions().stream().map(TransactionDTO::new).collect(Collectors.toSet());
+        this.transactions = account
+                .getTransactions()
+                .stream()
+                .map(TransactionDTO::new)
+                .collect(Collectors.toSet());
     }
 
     public long getId() {
@@ -61,13 +64,4 @@ public class AccountDTO {
         this.transactions = transactions;
     }
 
-    @Override
-    public String toString() {
-        return "AccountDTO{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", dateNow=" + dateNow +
-                ", balance=" + balance +
-                '}';
-    }
 }

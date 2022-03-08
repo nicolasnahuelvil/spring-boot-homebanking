@@ -1,7 +1,5 @@
 package com.mindhub.homebanking.models;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
@@ -100,14 +98,4 @@ public class Account  {
         this.transactions = transactions;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", dateNow=" + dateNow +
-                ", balance=" + balance +
-                ", client=" + client +
-                '}';
-    }
 }
