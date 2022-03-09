@@ -26,6 +26,8 @@ public class Client {
     Set<Account> accounts = new HashSet<>();
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<ClientLoan> clientLoans = new HashSet<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<Card> cards = new HashSet<>();
 
 
     //Constructor sin parametros
@@ -54,19 +56,28 @@ public class Client {
         this.email = email;
     }
 
-    public Client(String firstName, String lastName, String email, Set<Account> accounts, Set<ClientLoan> clientLoans) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.accounts = accounts;
-        this.clientLoans = clientLoans;
-    }
-
     public Client(String firstName, String lastName, String email, Set<ClientLoan> clientLoans) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.clientLoans = clientLoans;
+    }
+
+    public Client(String firstName, String lastName, String email, Set<Account> accounts, Set<Card> cards) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.accounts = accounts;
+        this.cards = cards;
+    }
+
+    public Client(String firstName, String lastName, String email, Set<Account> accounts, Set<ClientLoan> clientLoans, Set<Card> cards) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.accounts = accounts;
+        this.clientLoans = clientLoans;
+        this.cards = cards;
     }
 
     //Getters y setters
@@ -116,14 +127,12 @@ public class Client {
         clientLoans.add(clientLoan);
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", accounts=" + accounts +
-                '}';
+    public Set<Card> getCards() {
+        return cards;
     }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
 }

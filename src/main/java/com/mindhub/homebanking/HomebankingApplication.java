@@ -28,7 +28,8 @@ public class HomebankingApplication implements ApplicationRunner {
     private LoanRepository loanRepository;
     @Autowired
     private ClientLoanRepository clientLoanRepository;
-
+    @Autowired
+    private CardRepository cardRepository;
 
 
     @Override
@@ -77,6 +78,13 @@ public class HomebankingApplication implements ApplicationRunner {
         clientLoanRepository.save(clientLoan2);
         clientLoanRepository.save(clientLoan3);
         clientLoanRepository.save(clientLoan4);
+        //Crear CARDS
+        Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT, CardColor.GOLD, "4352-7543-9453-4512", "254", LocalDate.now(), LocalDate.of(2027,3,9), client1);
+        Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT, CardColor.TITANIUM, "8785-6354-9971-8412", "331", LocalDate.now(), LocalDate.now().plusYears(5), client1);
+        Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "8876-4521-9654-8541", "945", LocalDate.now(), LocalDate.now().plusYears(5), client2);
+        cardRepository.save(card1);
+        cardRepository.save(card2);
+        cardRepository.save(card3);
 
     }
 
