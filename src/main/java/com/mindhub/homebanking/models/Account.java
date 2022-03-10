@@ -29,7 +29,6 @@ public class Account  {
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Transaction> transactions = new HashSet<>();
 
-
     public Account() {
     }
 

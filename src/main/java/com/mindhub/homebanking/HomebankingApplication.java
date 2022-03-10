@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,14 +31,15 @@ public class HomebankingApplication implements ApplicationRunner {
     private ClientLoanRepository clientLoanRepository;
     @Autowired
     private CardRepository cardRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
         //Creación de Clients
-        Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
-        Client client2 = new Client("Nicolás", "Nahuelvil", "nicolasnahuelvil@gmail.com");
+        Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba"));
+        Client client2 = new Client("Nicolás", "Nahuelvil", "nicolasnahuelvil@gmail.com", passwordEncoder.encode("nicolas123"));
         clientRepository.save(client1);
         clientRepository.save(client2);
         //Creación de cuentas bancarias
@@ -79,7 +81,7 @@ public class HomebankingApplication implements ApplicationRunner {
         clientLoanRepository.save(clientLoan3);
         clientLoanRepository.save(clientLoan4);
         //Crear CARDS
-        Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT, CardColor.GOLD, "4352-7543-9453-4512", "254", LocalDate.now(), LocalDate.of(2027,3,9), client1);
+        Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT, CardColor.GOLD, "4352-7543-9453-4512", "254", LocalDate.now(), LocalDate.now().plusYears(5), client1);
         Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT, CardColor.TITANIUM, "8785-6354-9971-8412", "331", LocalDate.now(), LocalDate.now().plusYears(5), client1);
         Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT, CardColor.SILVER, "8876-4521-9654-8541", "945", LocalDate.now(), LocalDate.now().plusYears(5), client2);
         cardRepository.save(card1);

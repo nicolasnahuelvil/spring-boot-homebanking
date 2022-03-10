@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api")
 public class AccountController {
 
     @Autowired
     AccountRepository accountRepository;
 
-    @GetMapping("")
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts() {
         return accountRepository
                 .findAll()
@@ -23,7 +23,7 @@ public class AccountController {
                 .toList();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AccountDTO getAccount(@PathVariable(value = "id") Long id) {
         return accountRepository
