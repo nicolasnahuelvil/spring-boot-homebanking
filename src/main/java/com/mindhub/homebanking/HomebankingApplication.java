@@ -43,10 +43,10 @@ public class HomebankingApplication implements ApplicationRunner {
         clientRepository.save(client1);
         clientRepository.save(client2);
         //Creación de cuentas bancarias
-        Account account1 = new Account("VIN001", LocalDate.now(), 5000, client1);
-        Account account2 = new Account("VIN002", LocalDate.now(), 7500, client2);
-        Account account3 = new Account("VIN003", LocalDate.now(), 7500, client1);
-        Account account4 = new Account("VIN004", LocalDate.now(), 7500, client1);
+        Account account1 = new Account("VIN-001", LocalDate.now(), 5000, client1);
+        Account account2 = new Account("VIN-002", LocalDate.now(), 7500, client2);
+        Account account3 = new Account("VIN-003", LocalDate.now(), 7500, client1);
+        Account account4 = new Account("VIN-004", LocalDate.now(), 7500, client1);
         //Se guardan los clientes
         accountRepository.save(account1);
         accountRepository.save(account2);
