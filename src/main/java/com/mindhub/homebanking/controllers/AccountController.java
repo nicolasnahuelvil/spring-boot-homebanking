@@ -10,10 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -55,5 +55,9 @@ public class AccountController {
 
     }
 
+    @GetMapping("/clients/current/accounts")
+    public Set<Account> getData(Authentication authentication){
+        return clientRepository.findByEmail(authentication.getName()).getAccounts();
+    }
 
 }

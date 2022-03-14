@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -72,6 +73,7 @@ public class Transaction {
         this.date = date;
     }
 
+    @JsonIgnore
     public Account getAccount() {
         return account;
     }

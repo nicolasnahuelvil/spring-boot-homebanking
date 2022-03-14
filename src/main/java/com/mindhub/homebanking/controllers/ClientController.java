@@ -25,7 +25,7 @@ public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @GetMapping("/clients")
     @ResponseStatus(HttpStatus.OK)
@@ -68,7 +68,6 @@ public class ClientController {
         Client client = clientRepository.findByEmail(authentication.getName());
         return new ClientDTO(client);
     }
-
 
 
 }

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class AccountDTO {
 
     private long id;
@@ -14,7 +13,6 @@ public class AccountDTO {
     private LocalDate dateNow;
     private double balance;
     private Set<TransactionDTO> transactions = new HashSet<>();
-
 
     public AccountDTO(Account account) {
         this.id = account.getId();
