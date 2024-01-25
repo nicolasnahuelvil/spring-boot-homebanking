@@ -13,6 +13,7 @@ var app = new Vue({
             })
             .catch(function (error) {
                 // handle error
+                window.location.href = "index.html";
                 app.error = error;
             })
         },

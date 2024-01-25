@@ -1,75 +1,60 @@
 package com.mindhub.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 
 @Entity
-public class Account  {
-
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
-    @NotNull
+    private Long id;
     private String number;
-    @NotNull
-    private LocalDate dateNow;
-    @NotNull
+    private LocalDateTime creationDate;
     private double balance;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     Set<Transaction> transactions = new HashSet<>();
 
-    public Account() {
+    public Account(){
+
     }
 
-    public Account(String number, LocalDate dateNow, double balance) {
+    public Account(String number, LocalDateTime creationDate, double balance, Client client) {
         this.number = number;
-        this.dateNow = dateNow;
-        this.balance = balance;
-    }
-
-    public Account(String number, LocalDate dateNow, double balance, Client client) {
-        this.number = number;
-        this.dateNow = dateNow;
+        this.creationDate = creationDate;
         this.balance = balance;
         this.client = client;
     }
-
-    public Account(long id, String number, LocalDate dateNow, double balance, Client client) {
-        this.id = id;
-        this.number = number;
-        this.dateNow = dateNow;
-        this.balance = balance;
-        this.client = client;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public String getNumber() {
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String  getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(String  number) {
         this.number = number;
     }
 
-    public LocalDate getDateNow() {
-        return dateNow;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setDateNow(LocalDate dateNow) {
-        this.dateNow = dateNow;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public double getBalance() {
@@ -80,7 +65,6 @@ public class Account  {
         this.balance = balance;
     }
 
-    @JsonIgnore
     public Client getClient() {
         return client;
     }
@@ -97,4 +81,8 @@ public class Account  {
         this.transactions = transactions;
     }
 
+    public void addTransaction(Transaction transaction) {
+        transaction.setAccount(this);
+        transactions.add(transaction);
+    }
 }

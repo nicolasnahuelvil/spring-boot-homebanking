@@ -1,6 +1,7 @@
 var app = new Vue({
     el:"#app",
     data:{
+        clientInfo: {},
         loanTypes: [],
         loanTypeId: 0,
         payments: 0,
@@ -10,10 +11,24 @@ var app = new Vue({
         errorMsg: null,
         accountToNumber: "VIN",
         amount: 0,
-        fees: []
+        fees: [],
+        fee: 0,
+        rent: 0,
+        rent20perc: 0,
     },
     methods:{
         getData: function(){
+
+           axios.get("/api/clients/current")
+               .then((response) => {
+                   //get client ifo
+                   this.clientInfo = response.data;
+               })
+               .catch((error)=>{
+                   // handle error
+                   this.errorMsg = "Error getting data";
+                   this.errorToats.show();
+               })
             Promise.all([axios.get("/api/loans"),axios.get("/api/clients/current/accounts")])
             .then((response) => {
                 //get loan types ifo
@@ -32,24 +47,33 @@ var app = new Vue({
             if(this.loanTypeId == 0){
                 this.errorMsg = "You must select a loan type";
                 this.errorToats.show();
-            }
-            else if(this.payments == 0){
+            } else if(this.payments == 0){
                 this.errorMsg = "You must select payments";
                 this.errorToats.show();
-            }
-            else if(this.accountToNumber == "VIN"){
+            } else if(this.accountToNumber == "VIN"){
                 this.errorMsg = "You must indicate an account";
                 this.errorToats.show();
-            }
-            else if(this.amount == 0){
+            } else if(this.amount == 0){
                 this.errorMsg = "You must indicate an amount";  
                 this.errorToats.show();
+            } else if(this.rent == 0){
+                this.errorMsg = "You must indicate a rent";
+                this.errorToats.show();
             }else{
-                this.modal.show();
+                 this.rent20perc = ((this.rent * 20)/100);
+                 if(this.rent20perc < this.fee){
+                     this.errorMsg = "El 20% de la Renta debe ser mayor o igual al valor de la cuota";
+                     this.errorToats.show();
+                 } else{
+                    this.modal.show();
+                    this.feesmodal.hide();
+                 }
+
+
             }
         },
         apply: function(){
-            axios.post("/api/loans",{loanId: this.loanTypeId, amount: this.amount, payments: this.payments, toAccountNumber: this.accountToNumber})
+            axios.post("/api/loans",{loanId: this.loanTypeId, amount: this.amount, payments: this.payments, toAccountNumber: this.accountToNumber, fees: this.fee})
             .then(response => { 
                 this.modal.hide();
                 this.okmodal.show();
@@ -69,6 +93,8 @@ var app = new Vue({
             this.fees = [];
             this.totalLoan = parseInt(this.amount) + (this.amount * 0.2);
             let amount = this.totalLoan / this.payments;
+            this.fee = this.totalLoan / this.payments;
+            console.log(this.fee);
             for(let i = 1; i <= this.payments; i++){
                 this.fees.push({ amount: amount });
             }

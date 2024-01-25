@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-model="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Client Manager</title>
@@ -23,7 +23,7 @@
                         <label for="email" class="form-label">Email address:</label>
                         <input type="email" v-model:value="email" class="form-control" id="email" placeholder="david@aol.com" required>
                     </div>
-                    <button type="submit" class="btn btn-success" id="add_player" v-on:click="addClient">Add client</button>
+                    <button type="submit" class="btn btn-success" id="add_client" v-on:click="addClient">Add client</button>
                 </form>
                 <div class="table-responsive mt-4">
                     <h2>Client list</h2>

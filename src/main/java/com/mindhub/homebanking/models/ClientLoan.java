@@ -1,8 +1,10 @@
 package com.mindhub.homebanking.models;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class ClientLoan {
@@ -11,30 +13,25 @@ public class ClientLoan {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    @NotNull
     private double amount;
-    @NotNull
+    private double fee;
     private int payments;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="loan_id")
+    @JoinColumn(name = "loan_id")
     private Loan loan;
-
-
+    @OneToMany(mappedBy = "clientLoan", fetch = FetchType.EAGER)
+    Set<PaymentLoan> paymentLoans = new HashSet<>();
 
     public ClientLoan() {
     }
 
-    public ClientLoan(double amount, int payments, Client client, Loan loan) {
+    public ClientLoan(double amount, double fee, int payments, Client client, Loan loan) {
         this.amount = amount;
+        this.fee = fee;
         this.payments = payments;
-        this.client = client;
-        this.loan = loan;
-    }
-
-    public ClientLoan(Client client, Loan loan) {
         this.client = client;
         this.loan = loan;
     }
@@ -43,12 +40,8 @@ public class ClientLoan {
         return id;
     }
 
-    public int getPayments() {
-        return payments;
-    }
-
-    public void setPayments(int payments) {
-        this.payments = payments;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public double getAmount() {
@@ -57,6 +50,18 @@ public class ClientLoan {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+   public double getFee() { return fee; }
+
+   public void setFee(double fee) { this.fee = fee; }
+
+    public int getPayments() {
+        return payments;
+    }
+
+    public void setPayments(int payments) {
+        this.payments = payments;
     }
 
     public Client getClient() {
@@ -75,5 +80,15 @@ public class ClientLoan {
         this.loan = loan;
     }
 
+    public Set<PaymentLoan> getPaymentLoans() {
+        return paymentLoans;
+    }
 
+    public void setPaymentLoans(Set<PaymentLoan> paymentLoans) {
+        this.paymentLoans = paymentLoans;
+    }
+    public void addPaymentLoan(PaymentLoan paymentLoan) {
+        paymentLoan.setClientLoan(this);
+        paymentLoans.add(paymentLoan);
+    }
 }

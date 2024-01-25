@@ -1,96 +1,49 @@
 package com.mindhub.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 public class Client {
 
-    //Se declara los atributos de Cliente
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    @JsonIgnore
     private Long id;
-    @NotNull
     private String firstName;
-    @NotNull
     private String lastName;
-    @NotNull
     private String email;
+    private String phoneNumber;
     private String password;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<ClientLoan> clientLoans = new HashSet<>();
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<Card> cards = new HashSet<>();
+    @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
+    private Set<ClientInvestment> clientInvestments = new HashSet<>();
 
-
-    //Constructor sin parametros
     public Client() {
     }
 
-    public Client(Long id, String firstName, String lastName, String email, Set<Account> account) {
-        this.id = id;
+    public Client(String firstName, String lastName, String email, String phoneNumber, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.accounts = accounts;
-    }
-
-    public Client(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    //Constructor con todos los parametros
-    public Client(Long id, String firstName, String lastName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public Client(String firstName, String lastName, String email, Set<ClientLoan> clientLoans) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.clientLoans = clientLoans;
-    }
-
-    public Client(String firstName, String lastName, String email, Set<Account> accounts, Set<Card> cards) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.accounts = accounts;
-        this.cards = cards;
-    }
-
-    public Client(String firstName, String lastName, String email, Set<Account> accounts, Set<ClientLoan> clientLoans, Set<Card> cards) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.accounts = accounts;
-        this.clientLoans = clientLoans;
-        this.cards = cards;
-    }
-
-    public Client(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
     }
 
-    //Getters y setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -117,6 +70,14 @@ public class Client {
         this.email = email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -129,26 +90,46 @@ public class Client {
         return accounts;
     }
 
-    public void addAccounts(Account account) {account.setClient(this);accounts.add(account);}
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 
-    @JsonIgnore
-    public void setAccounts(Set<Account> accounts) {this.accounts = accounts;}
-
-    public Set<ClientLoan> getClientLoans() {return clientLoans;}
-
-    public void setClientLoans(Set<ClientLoan> clientLoans) {this.clientLoans = clientLoans;}
-
-    public void addClientLoans(ClientLoan clientLoan) {
-        clientLoan.setClient(this);
-        clientLoans.add(clientLoan);
+    public void addAccount(Account account) {
+        account.setClient(this);
+        accounts.add(account);
     }
 
     public Set<Card> getCards() {
         return cards;
     }
 
-    public void setCards(Set<Card> cards) {
-        this.cards = cards;
+    public void addCard(Card card) {
+        card.setClient(this);
+        cards.add(card);
     }
 
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void setClientLoans(Set<ClientLoan> clientLoans) {
+        this.clientLoans = clientLoans;
+    }
+
+    public void addClientLoans(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientLoans.add(clientLoan);
+    }
+
+    public void setClientInvestments(Set<ClientInvestment> clientInvestments) {
+        this.clientInvestments = clientInvestments;
+    }
+
+    public Set<ClientInvestment> getClientInvestments() {
+        return clientInvestments;
+    }
+    public void addClientInversion(ClientInvestment clientInvestment) {
+        clientInvestment.setClient(this);
+        clientInvestments.add(clientInvestment);
+    }
 }

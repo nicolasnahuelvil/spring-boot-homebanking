@@ -2,6 +2,8 @@ var app = new Vue({
     el:"#app",
     data:{
         clientInfo: {},
+        accountToNumber: "VIN",
+        investmentId: 0,
         errorToats: null,
         errorMsg: null,
     },
@@ -29,8 +31,27 @@ var app = new Vue({
                     this.errorToats.show();
                 })
         },
+        setIdInvestment: function(id){
+            if(this.accountToNumber == "VIN"){
+                 this.errorMsg = "Debe seleccionar una cuenta de Retiro";
+                 this.errorToats.show();
+            } else{
+                this.investmentId = id;
+                let config = {
+                    headers: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    }
+                }
+                axios.post(`/api/investments?id=${this.investmentId}&toAccountNumber=${this.accountToNumber}`,config)
+                 .then(response => window.location.reload())
+                .catch((error) =>{
+                    this.errorMsg = error.response.data;
+                    this.errorToats.show();
+                })
+            }
+        },
         create: function(){
-            axios.post('http://localhost:8080/api/clients/current/accounts')
+            axios.post('/api/clients/current/accounts')
                 .then(response => window.location.reload())
                 .catch((error) =>{
                     this.errorMsg = error.response.data;

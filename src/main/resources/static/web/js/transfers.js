@@ -1,6 +1,7 @@
 var app = new Vue({
     el:"#app",
     data:{
+        clientInfo: {},
         clientAccounts: [],
         clientAccountsTo: [],
         debitCards: [],
@@ -10,10 +11,21 @@ var app = new Vue({
         accountToNumber: "VIN",
         trasnferType: "own",
         amount: 0,
-        description: ""
+        description: "",
+        transactionCode: ""
     },
     methods:{
         getData: function(){
+            axios.get("/api/clients/current")
+                .then((response) => {
+                    //get client ifo
+                    this.clientInfo = response.data;
+                })
+                .catch((error)=>{
+                    // handle error
+                    this.errorMsg = "Error getting data";
+                    this.errorToats.show();
+                }),
             axios.get("/api/clients/current/accounts")
             .then((response) => {
                 //get client ifo
@@ -28,6 +40,7 @@ var app = new Vue({
             return new Date(date).toLocaleDateString('en-gb');
         },
         checkTransfer: function(){
+            this.transactionCode = ""
             if(this.accountFromNumber == "VIN"){
                 this.errorMsg = "You must select an origin account";  
                 this.errorToats.show();
@@ -43,24 +56,52 @@ var app = new Vue({
                 this.errorMsg = "You must indicate a description";  
                 this.errorToats.show();
             }else{
-                this.modal.show();
+                let config = {
+                    headers: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    }
+                }
+                console.log('SMS OK')
+                axios.post(`/api/pre-transaction?fromAccountNumber=${this.accountFromNumber}&toAccountNumber=${this.accountToNumber}&amount=${this.amount}&description=${this.description}`,config)
+                    .then(response => {
+                        console.log('SMS OK')
+                        this.modal.show();
+                        console.log('response', response)
+
+                    })
+                    .catch((error) =>{
+                        console.log('error', error)
+                        this.errorMsg = error.response.data;
+                        this.errorToats.show();
+                    })
+
+
             }
         },
         transfer: function(){
+            if(this.transactionCode == ""){
+                this.errorMsg = "You must input transaction code";
+                this.errorToats.show();
+                return
+            }
+
             let config = {
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded'
                 }
             }
-            axios.post(`/api/transactions?fromAccountNumber=${this.accountFromNumber}&toAccountNumber=${this.accountToNumber}&amount=${this.amount}&description=${this.description}`,config)
-            .then(response => { 
-                this.modal.hide();
-                this.okmodal.show();
-            })
-            .catch((error) =>{
-                this.errorMsg = error.response.data;  
-                this.errorToats.show();
-            })
+            axios.post(`/api/transactions?transactionCode=${this.transactionCode}&fromAccountNumber=${this.accountFromNumber}&toAccountNumber=${this.accountToNumber}&amount=${this.amount}&description=${this.description}`,config)
+                .then(response => {
+                    this.modal.hide();
+                    this.okmodal.show();
+                    console.log('response', response)
+                    this.errorToats.hide();
+                })
+                .catch((error) =>{
+                    console.log('error', error)
+                    this.errorMsg = error.response.data;
+                    this.errorToats.show();
+                })
         },
         changedType: function(){
             this.accountFromNumber = "VIN";

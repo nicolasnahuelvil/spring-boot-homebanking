@@ -1,19 +1,21 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.4'
+	id 'org.springframework.boot' version '2.3.0.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
 group = 'com.mindhub'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
 }
 
 bootRun {
+
 	sourceResources sourceSets.main
+
 }
 
 
@@ -22,8 +24,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.postgresql:postgresql'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.2'
+	implementation group: "com.twilio.sdk", name: "twilio", version: "8.27.1"
+	//https://mvnrepository.com/artifact/org.jsoup/jsoup
+	//implementation 'org.jsoup:jsoup:1.14.3'
+	//implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.6.6'
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf
+	//implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.1.1.RELEASE'
+	//implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.6.6'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
 }
 
 tasks.named('test') {
