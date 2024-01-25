@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inversiones | HomeBanking</title>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/nice-select.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hbanking.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="bg-two">
+
+<div id="app">
+    <!-- preloader area start -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <div class="spinner">
+                <div class="dot1"></div>
+                <div class="dot2"></div>
+            </div>
+        </div>
+    </div>
+    <!-- preloader area end -->
+    <div class="body-overlay" id="body-overlay"></div>
+    <!-- topbar-area start -->
+    <div class="topbar-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 align-self-center">
+                    <div class="topbar-left text-md-left text-center">
+                        <p><img height=40" src="img/logo-2.png" alt="logo"></p>
+                    </div>
+                </div>
+                <div class="col-md-2 align-self-center">
+                    <div class="topbar-left text-md-left text-center">
+                        <p>Hola! {{  clientInfo.firstName }} {{ clientInfo.lastName }}</p>
+                    </div>
+                </div>
+                <div class="col-md-2 align-self-center">
+
+                </div>
+                <div class="col-md-2 align-self-center">
+
+                </div>
+                <div class="col-md-2 text-md-right text-center">
+                    <div class="topbar-right">
+                        <!--<p><a href="en/index.html"><img src="img/flags/uk.png" width="24"></a></p>
+                        <p><a href="fr/index.html"><img src="img/flags/france.png" width="24"></a></p>-->
+                    </div>
+                </div>
+                <div class="col-md-2 align-self-center">
+                    <a class="btn btn-danger text-white" v-on:click="signOut"><i class="fa fa-times"></i> <small>Salir</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- topbar-area end -->
+
+    <!-- navbar start -->
+    <div class="navbar-area bg-one">
+        <nav class="navbar navbar-area navbar-expand-lg">
+            <div class="container nav-container">
+                <div class="responsive-mobile-menu">
+                    <button class="menu toggle-btn d-block d-lg-none" data-target="#banlank_main_menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-left"></span>
+                        <span class="icon-right"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="banlank_main_menu">
+                    <ul class="navbar-nav menu-open">
+                        <li class="current-menu-item">
+                            <a href="accounts.html">Cuentas</a>
+                        </li>
+                        <li><a href="cards.html">Tarjetas</a></li>
+                        <li><a href="transfers.html">Transferir Dinero</a></li>
+                        <li><a href="loan-application.html">Prestamos</a></li>
+                        <li><a href="payment-loan.html">Pago de Crédito</a></li>
+                        <li><a href="inversion-application.html">Inversiones</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- navbar end -->
+
+    <!-- partner area start -->
+    <div id="educ" class="partner-area">
+        <div class="container">
+            <div id="app">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="display-6 subtitle">Inversiones</h2>
+
+                            <br>
+                            <br>
+
+                            <!-- Start Investment -->
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr><th>IDENTIFICADOR</th>
+                                    <th>OPCION DE INVERSIÓN</th>
+                                    <th>APR</th>
+                                    <th>MÉTODO DE RETIRO</th>
+                                    <th>COMPRA MÍNIMA</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="inversion in inversions">
+                                    <td>{{ inversion.id }}</td>
+                                    <td>{{ inversion.macroName }} {{ inversion.name }} </td>
+                                    <td>{{ inversion.apr }}</td>
+                                    <td v-if="inversion.flexible == true">T + {{ inversion.lockUp }}</td>
+                                    <td v-else>A {{ inversion.lockUp }} días desde inversión</td>
+                                    <td>{{ inversion.minAmount }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <form class="mt-4">
+                                    <label for="origin" class="form-label">Cuenta Capital:</label>
+                                    <select id="origin" v-model="accountFromNumber" class="form-control" aria-label="" required>
+                                        <option value="VIN">Seleccione Cuenta</option>
+                                        <option v-for="account in clientInfo.accounts" v-bind:value="account.number">{{ account.number }} | Saldo: {{ account.balance }}</option>
+                                    </select>
+
+                                    <label for="inversion" class="form-label">Opción de Inversión:</label>
+                                    <select id="inversion" v-model="inversionId" class="form-control" aria-label="" required>
+                                        <option value="VIN">Seleccione Opción</option>
+                                        <option v-for="inversion in inversions" v-bind:value="inversion.id">{{ inversion.id }} | {{ inversion.macroName }} {{ inversion.name }}</option>
+                                    </select>
+
+                                    <label for="amount">Monto a Invertir</label>
+                                    <input id="amount" v-model="amountInversion" type="number" class="form-control" placeholder="20000" aria-label=" ">
+
+
+                                <button type="button" v-on:click="checkApplication" class="btn btn-sm btn-success mt-4">Solicitar</button>
+                            </form>
+
+                            <!-- End Investment -->
+
+                            <div v-if="errorMsg != null" class="alert alert-danger">
+                                <div class="toast-body">
+                                    {{ errorMsg }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div style="margin-top:100px;"  class="modal fade" id="confirModal" tabindex="-1" aria-labelledby="confirModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirModalLabel">Confirmar Inversión</h5>
+                                </div>
+                                <div class="modal-body">
+                                    Las inversiones no se pueden retirar hasta el plazo indicado<br>¿Desea Continuar?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <br>
+                                    <button type="button" v-on:click="apply" class="btn btn-sm btn-success">Sí, Invertir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal 2-->
+                    <div style="margin-top:100px;"  class="modal fade" id="okModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="okModalLabel">Solicitud Completa!</h5>
+                                </div>
+                                <div class="modal-body">
+                                    Inversión {{ resInversion }} realizada! <i class="bi bi-check-circle-fill text-success"></i>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" v-on:click="finish" class="btn btn-sm btn-success" data-bs-dismiss="modal">Ok</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!-- partner area end -->
+
+    <!-- footer area start -->
+    <footer class="footer-area-in">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="widget widget-address">
+                            <a class="widget-title" href="index.html#"><img src="img/logo-2.png" alt="logo"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer area end -->
+
+</div>
+
+<!-- all plugins her<e -->
+<!--<script src="js/vendor.js"></script>-->
+<!-- main js  -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script src="js/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+<script src="js/inversion-application.js"></script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/623a7a2c2bd26d087e74387c/1fuq6qfuf';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+
+</html>
